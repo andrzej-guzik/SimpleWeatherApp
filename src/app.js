@@ -1,14 +1,17 @@
 import axios from "axios";
-import "./app.css";
+import "./css/app.css";
 import {ROOT_URL} from "./config";
 
 const form = document.querySelector("form");
-const table = document.querySelector("table");
+const app = document.querySelector("#app");
 
-let thead = document.createElement("thead");
-let tbody = document.createElement("tbody");
+const table = document.createElement("table");
+const thead = document.createElement("thead");
+const tbody = document.createElement("tbody");
 
 let message = "";
+let viewportWidth = window.innerWidth;
+const MQ = 700;
 
 const addHeaders = (headers) => {
 	let tr = document.createElement("tr");
@@ -28,15 +31,23 @@ const addHeaders = (headers) => {
 
 	thead.appendChild(tr);
 	thead.classList.add("hidden");
+};
+
+const createHeader = () => {
+	addHeaders([
+		{ name: "City", icon: "fa-map-marker" },
+		{ name: "Temperature [C]", icon: "fa-thermometer-0" },
+		{ name: "Pressure [hpa]", icon: "fa-area-chart" },
+		{ name: "Humidity [%]", icon: "fa-tint" }
+	]);
 	table.appendChild(thead);
 };
 
-addHeaders([
-    { name: "City", icon: "fa-map-marker" },
-    { name: "Temperature [C]", icon: "fa-thermometer-0" },
-    { name: "Pressure [hpa]", icon: "fa-area-chart" },
-    { name: "Humidity [%]", icon: "fa-tint" }
-]);
+if (viewportWidth > MQ) {
+	createHeader();
+	app.appendChild(table);
+}
+
 
 const addRow = (arr) => {
 	let tr = document.createElement("tr");
@@ -51,8 +62,17 @@ const addRow = (arr) => {
 
 const renderWeather = (cityData) => {
 	if (cityData) {
-		addRow([ cityData.name, cityData.main.temp, cityData.main.pressure, cityData.main.humidity ]);
-		table.appendChild(tbody);
+		if (viewportWidth <= MQ) {
+			createHeader();
+			thead.classList.remove("hidden");
+			addRow([ cityData.name, cityData.main.temp, cityData.main.pressure, cityData.main.humidity ]);
+			table.appendChild(tbody);
+			app.appendChild(table);
+		} else {
+			addRow([ cityData.name, cityData.main.temp, cityData.main.pressure, cityData.main.humidity ]);
+			table.appendChild(tbody);
+		}
+
 	}
 };
 

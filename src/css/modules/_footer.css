@@ -1,0 +1,26 @@
+.app-footer {
+	position: absolute;
+	background: #16a085;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 4rem;
+
+	&__copyright {
+		text-align: center;
+		color: #f7f8f9;
+		font-weight: 300;
+		margin: 0;
+		padding-top: 1rem;
+
+		a {
+			color: #eeee;
+			text-decoration: none;
+			font-weight: 400;
+			
+			&:hover {
+				color: #d35400;
+			}
+		}
+	}
+}
